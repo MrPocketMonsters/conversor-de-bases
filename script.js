@@ -11,7 +11,6 @@ const SYMS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";  //Caracteres reconocibles.
 function esInt (str)//---------------------------------------------------
 {
     //Revisa si todos los carácteres de la cadena son números.
-    if (typeof str != "string") return false;
     for (let i of str)
         if (+parseInt(i) !== +parseInt(i)) return false;
     return true;
@@ -115,8 +114,8 @@ function convertir(baseA, baseB, num)//------------------
 
 //------------------------------------Main--------------------------------------
 
-alert(`Bienvenido. En este programa podrá convertir números naturales
-hasta 1.844x10^19 (base 10) entre bases del 2 al 36.`);
+alert("Bienvenido. En este programa podrá convertir de manera exacta " +
+      "números naturales hasta 2^53 - 1 (base 10) entre bases del 2 al 36.");
 
 while (true)
 {
@@ -128,7 +127,7 @@ while (true)
     {
         resp = prompt("Por favor ingrese la base de su número:");
 
-        if (esInt(resp))
+        if (typeof resp === "string" && esInt(resp))
         {
             baseA = parseInt(resp);
 
@@ -143,12 +142,12 @@ while (true)
     while (true)
     {
         num = prompt("Por favor ingrese el número a convertir:");
-        num = num.toUpperCase();
+        if (typeof num === "string") num.toUpperCase();
 
-        if (!checkBase(baseA, num))
-            alert("ERROR: La cadena ingresada no corresponde a un número en la base, inténtelo de nuevo.");
-        else
+        if (typeof num === "string" && checkBase(baseA, num))
             break;
+        else
+            alert("ERROR: La cadena ingresada no corresponde a un número en la base, inténtelo de nuevo.");
     }
 
     //Mismas comprobaciones que baseA.
@@ -156,7 +155,7 @@ while (true)
     {
         resp = prompt("Por favor ingrese la base a la que desea convertir:");
         
-        if (esInt(resp))
+        if (typeof resp === "string" && esInt(resp))
         {
             baseB = parseInt(resp);
 
