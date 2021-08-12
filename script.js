@@ -8,14 +8,6 @@ FECHA:      11 de agosto de 2021
 const SYMS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";  //Caracteres reconocibles.
 
 //---------------------------------Funciones------------------------------------
-function esInt (str)//---------------------------------------------------
-{
-    //Revisa si todos los carácteres de la cadena son números.
-    for (let i of str)
-        if (+parseInt(i) !== +parseInt(i)) return false;
-    return true;
-}
-
 function checkBase(baseA, num)//------------------------------------
 {
     //Se repite para cada caracter de la cadena num
@@ -97,7 +89,6 @@ function convertir(baseA, baseB, num)//------------------
             while (dividendo >= baseB)
             {
                 numCon = numCon.toString() + SYMS[dividendo % baseB];
-                console.log(dividendo + " " + dividendo % baseB);
                 dividendo = Math.trunc(dividendo / baseB);
             }
             //Se concatena el dividendo final en la cadena resultante.
@@ -112,77 +103,34 @@ function convertir(baseA, baseB, num)//------------------
     return numCon;
 }
 
-//------------------------------------Main--------------------------------------
 
-alert("Bienvenido. En este programa podrá convertir de manera exacta " +
-      "números naturales hasta 2^53 - 1 (base 10) entre bases del 2 al 36.");
-
-while (true)
+function doIt()
 {
-    let baseA = 0, baseB = 0;
-    let resp = "", num = "";
+    let num = document.getElementById("numero").value.toUpperCase();
+    let baseA = document.getElementById("baseA").value;
+    let baseB = document.getElementById("baseB").value;
+    let respuesta = document.getElementById("respuesta");
+    let error = document.getElementById("error");
 
-    //Para este input se comprueba si es un número entero y luego si está entre 2 y 36.
-    while (true)
+
+    if (num == "")
     {
-        resp = prompt("Por favor ingrese la base de su número:");
-
-        if (typeof resp === "string" && esInt(resp))
-        {
-            baseA = parseInt(resp);
-
-            if (baseA > 1 && baseA < 37)
-                break;
-        }
-        alert("ERROR: Se esperaba un entero entre 2 y 36. inténtelo de nuevo.");
-    }
-
-    //Para este input se comprueba que todos los carácteres necesarios estén en el umbral
-    //0-${baseA} de los carácteres de la cadena SYMS.
-    while (true)
+        error.innerHTML = "Por favor escriba un número.";
+        respuesta.value = "ERROR";
+    }    
+    else if (baseA < 2 || baseA > 36 || baseB < 2 || baseB > 36)
     {
-        num = prompt("Por favor ingrese el número a convertir:");
-        if (typeof num === "string") num.toUpperCase();
-
-        if (typeof num === "string" && checkBase(baseA, num))
-            break;
-        else
-            alert("ERROR: La cadena ingresada no corresponde a un número en la base, inténtelo de nuevo.");
+        error.innerHTML = "Las bases deben ser mayores a 1 y menores a 37.";
+        respuesta.vale = "ERROR";
     }
-
-    //Mismas comprobaciones que baseA.
-    while (true)
+    else if (!checkBase(baseA, num))
     {
-        resp = prompt("Por favor ingrese la base a la que desea convertir:");
-        
-        if (typeof resp === "string" && esInt(resp))
-        {
-            baseB = parseInt(resp);
-
-            if (baseB > 1 && baseB < 37)
-                break;
-        }
-        alert("ERROR: Se esperaba un entero entre 2 y 36. inténtelo de nuevo.");
+        error.innerHTML = "La cadena ingresada no corresponde a un número escrito en esa cadena.";
+        respuesta.vale = "ERROR";
     }
-
-    //Finalmente se imprime directamente el resultado de la función convertir.
-    document.write(`Convertir ${num} de base ${baseA} a base ${baseB}<br>`);
-    document.write(`Resultado: ${convertir(baseA, baseB, num).toString()}<br>`);
-
-    //---------------------------Salir--------------------------------------
-    let salir = false;
-    while (true)
+    else
     {
-        resp = prompt("¿Desea convertir otro número? (S/N)");
-
-        if (resp.toUpperCase() != 'S' && resp.toUpperCase() != 'N' || resp == null)
-            alert("ERROR: Carácter inválido, inténtelo de nuevo.");
-        else
-        {
-            //Si el usuario indica que quiere salir, salir se hace true.
-            if (resp.toUpperCase() == 'N') salir = true;
-            break;
-        }
+        error.innerHTML = "";
+        respuesta.value = convertir (baseA, baseB, num);
     }
-    if (salir) break;
 }
