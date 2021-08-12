@@ -5,32 +5,57 @@
         <title>Conversor de Bases - Universidad Francisco José de Caldas</title>
         <link rel="icon" href="favicon.ico">
     </head>
-    <body>
+    <body style="background-color:rgb(231, 219, 186);">
         <h1>
-            <img src="logo.png" width="300px"><img> Conversor de Bases
+            <img src="logo.png" width="300px"></img>
+            <center>
+                Conversor de Bases
+            </center>
         </h1>
         
         <script src="script.js"></script>
 
         <p>
-            Bienvenido. En este programa podrá convertir de manera exacta
-            números naturales hasta 2^53 - 1 (base 10) entre bases del 2 al 36.
+            Bienvenido. Esta página fue creada para la clase de Introducción a la Teoría de Números del
+            programa de Ingeniería de Sistemas de la Universidad Distrital Francisco José de Caldas por
+            el estudiante Nicolás David Sabogal Velásquez en agosto de 2021.<br>
+            En esta página usted podrá convertir números naturales hasta 
+            <b>(2<sup>53</sup> - 1)<sub>10</sub></b> entre bases del 2 al 36.
         </p>
 
         <form id="form">
-            <label for="numero">Convertir el número</label>
-            <input type="text" id="numero" name="numero" required>
-            <label for="baseA">, escrito en base</label>
-            <input id="baseA" type="number" name="baseA" min="2" max="36" required>
-            <label for="baseB">a base</label>
-            <input id="baseB" type="number" name="baseB" min="2" max="36" required>
-            <input type="button" onclick="doIt()" value="Enviar"><br>
+            <center>
+                <table>
+                    <tr>
+                        <td><label for="numero">Convertir el número</label></td>
+                        <td><input type="text" id="numero" name="numero" ><br></td>
+                    </tr>
+                    <tr>
+                        <td><label for="baseA">escrito en base</label></td>
+                        <td><input id="baseA" type="number" name="baseA" min="2" max="36"><br></td>
+                    </tr>
+                    <tr>
+                        <td><label for="baseB">a base</label></td>
+                        <td><input id="baseB" type="number" name="baseB" min="2" max="36"><br></td>
+                    </tr>
+                    <tr>
+                        <!--Al momento de clickear el botón, se ejecutará la última función de script.js-->
+                        <td></td>
+                        <td>
+                            <input type="button" onclick="intercambiar()" value="Intercambiar bases">
+                            <input type="button" onclick="doIt()" value="Enviar"><br>
+                        </td>
+                    </tr>
+                </table>
+            </center>
         </form>
 
         <p>
-            <p id="error" style="color:red"> </p><br>
-            El número convertido:
-            <input type="text" id="respuesta">
+            <center>
+                <p id="error" style="color:red"> </p><br>
+                El número convertido:<br>
+                <textarea id="respuesta"></textarea>
+            </center>
         </p>
 
     </body>

@@ -8,7 +8,7 @@ FECHA:      11 de agosto de 2021
 const SYMS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";  //Caracteres reconocibles.
 
 //---------------------------------Funciones------------------------------------
-function checkBase(baseA, num)//------------------------------------
+function checkBase(baseA, num)//------------------------------------------------
 {
     //Se repite para cada caracter de la cadena num
     for (let i = 0; i < num.length; i++)
@@ -33,19 +33,18 @@ function checkBase(baseA, num)//------------------------------------
     return true;
 }
 
-function invertir(str)//-----------------------------------------
+function invertir(str)//--------------------------------------------------------
 {
-    if (typeof str != "string") return str;
-    //Intercambia cada caracter de la primera mita de las posiciones con su
-    //posición complemento correspondiente.
-    let array = str.split("");
-    array = array.reverse();
-    str = array.join("");
+    if (typeof str != "string") return str; //Recibe únicamente strings
+    
+    let array = str.split("");  //El método split convierte la cadena a arreglo
+    array = array.reverse();    //El método reverse invierte la posición de los elementos
+    str = array.join("");       //El método join convierte un arreglo a cadena
 
     return str;
 }
 
-function convertir(baseA, baseB, num)//------------------
+function convertir(baseA, baseB, num)//-----------------------------------------
 {
     //Iniciar guardando la cadena entrante en la cadena resultante.
     let numCon = num;
@@ -103,9 +102,10 @@ function convertir(baseA, baseB, num)//------------------
     return numCon;
 }
 
-
+//-------Esta función se ejecuta desde la página html al oprimir el botón-------
 function doIt()
 {
+    //Este bloque de variables guarda las variables en la forma de la página html
     let num = document.getElementById("numero").value.toUpperCase();
     let baseA = document.getElementById("baseA").value;
     let baseB = document.getElementById("baseB").value;
@@ -116,21 +116,30 @@ function doIt()
     if (num == "")
     {
         error.innerHTML = "Por favor escriba un número.";
-        respuesta.value = "ERROR";
+        respuesta.value = "<ERROR>";
     }    
     else if (baseA < 2 || baseA > 36 || baseB < 2 || baseB > 36)
     {
         error.innerHTML = "Las bases deben ser mayores a 1 y menores a 37.";
-        respuesta.vale = "ERROR";
+        respuesta.innerHTML = "<ERROR>";
     }
     else if (!checkBase(baseA, num))
     {
         error.innerHTML = "La cadena ingresada no corresponde a un número escrito en esa cadena.";
-        respuesta.vale = "ERROR";
+        respuesta.innerHTML = "<ERROR>";
     }
     else
     {
         error.innerHTML = "";
-        respuesta.value = convertir (baseA, baseB, num);
+        respuesta.innerHTML = convertir (baseA, baseB, num);
     }
+}
+
+function intercambiar ()
+{
+    let baseA = document.getElementById("baseA").value;
+    let baseB = document.getElementById("baseB").value;
+
+    document.getElementById("baseA").value = baseB;
+    document.getElementById("baseB").value = baseA;
 }
