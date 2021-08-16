@@ -8,7 +8,15 @@ FECHA:      11 de agosto de 2021
 const SYMS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";  //Caracteres reconocibles.
 
 //---------------------------------Funciones------------------------------------
-function checkBase(baseA, num)//------------------------------------------------
+function esInt (str)//---------------------------------------------------
+{
+    //Revisa si todos los carácteres de la cadena son números.
+    for (let i of str)
+        if (+parseInt(i) !== +parseInt(i)) return false;
+    return true;
+}
+
+function checkBase(baseA, num)//------------------------------------
 {
     //Se repite para cada caracter de la cadena num
     for (let i = 0; i < num.length; i++)
@@ -33,18 +41,19 @@ function checkBase(baseA, num)//------------------------------------------------
     return true;
 }
 
-function invertir(str)//--------------------------------------------------------
+function invertir(str)//-----------------------------------------
 {
-    if (typeof str != "string") return str; //Recibe únicamente strings
-    
-    let array = str.split("");  //El método split convierte la cadena a arreglo
-    array = array.reverse();    //El método reverse invierte la posición de los elementos
-    str = array.join("");       //El método join convierte un arreglo a cadena
+    if (typeof str != "string") return str;
+    //Intercambia cada caracter de la primera mita de las posiciones con su
+    //posición complemento correspondiente.
+    let array = str.split("");
+    array = array.reverse();
+    str = array.join("");
 
     return str;
 }
 
-function convertir(baseA, baseB, num)//-----------------------------------------
+function convertir(baseA, baseB, num)//------------------
 {
     //Iniciar guardando la cadena entrante en la cadena resultante.
     let numCon = num;
@@ -88,6 +97,7 @@ function convertir(baseA, baseB, num)//-----------------------------------------
             while (dividendo >= baseB)
             {
                 numCon = numCon.toString() + SYMS[dividendo % baseB];
+                console.log(dividendo + " " + dividendo % baseB);
                 dividendo = Math.trunc(dividendo / baseB);
             }
             //Se concatena el dividendo final en la cadena resultante.
@@ -102,40 +112,77 @@ function convertir(baseA, baseB, num)//-----------------------------------------
     return numCon;
 }
 
-//-------Esta función se ejecuta desde la página html al oprimir el botón-------
-function doIt()
+//------------------------------------Main--------------------------------------
+
+alert("Bienvenido. En este programa podrá convertir de manera exacta " +
+      "números naturales hasta 2^53 - 1 (base 10) entre bases del 2 al 36.");
+
+while (true)
 {
-    //Este bloque de variables guarda las variables en la forma de la página html
-    let num = document.getElementById("numero").value.toUpperCase();
-    let baseA = document.getElementById("baseA").value;
-    let baseB = document.getElementById("baseB").value;
-    let respuesta = document.getElementById("respuesta");
+    let baseA = 0, baseB = 0;
+    let resp = "", num = "";
 
+    //Para este input se comprueba si es un número entero y luego si está entre 2 y 36.
+    while (true)
+    {
+        resp = prompt("Por favor ingrese la base de su número:");
 
-    if (num == "")
-    {
-        alert("Por favor escriba un número.");
-        respuesta.value = "<ERROR>";
-    }    
-    else if (baseA < 2 || baseA > 36 || baseB < 2 || baseB > 36)
-    {
-        alert("Las bases deben ser mayores a 1 y menores a 37.");
-        respuesta.innerHTML = "<ERROR>";
+        if (typeof resp === "string" && esInt(resp))
+        {
+            baseA = parseInt(resp);
+
+            if (baseA > 1 && baseA < 37)
+                break;
+        }
+        alert("ERROR: Se esperaba un entero entre 2 y 36. inténtelo de nuevo.");
     }
-    else if (!checkBase(baseA, num))
+
+    //Para este input se comprueba que todos los carácteres necesarios estén en el umbral
+    //0-${baseA} de los carácteres de la cadena SYMS.
+    while (true)
     {
-        alert("La cadena ingresada no corresponde a un número escrito en esa cadena.");
-        respuesta.innerHTML = "<ERROR>";
+        num = prompt("Por favor ingrese el número a convertir:");
+        if (typeof num === "string") num.toUpperCase();
+
+        if (num != "" && checkBase(baseA, num))
+            break;
+        else
+            alert("ERROR: La cadena ingresada no corresponde a un número en la base, inténtelo de nuevo.");
     }
-    else
-        respuesta.innerHTML = convertir (baseA, baseB, num);
-}
 
-function intercambiar ()
-{
-    let baseA = document.getElementById("baseA").value;
-    let baseB = document.getElementById("baseB").value;
+    //Mismas comprobaciones que baseA.
+    while (true)
+    {
+        resp = prompt("Por favor ingrese la base a la que desea convertir:");
+        
+        if (typeof resp === "string" && esInt(resp))
+        {
+            baseB = parseInt(resp);
 
-    document.getElementById("baseA").value = baseB;
-    document.getElementById("baseB").value = baseA;
+            if (baseB > 1 && baseB < 37)
+                break;
+        }
+        alert("ERROR: Se esperaba un entero entre 2 y 36. inténtelo de nuevo.");
+    }
+
+    //Finalmente se imprime directamente el resultado de la función convertir.
+    document.write(`Convertir ${num} de base ${baseA} a base ${baseB}<br>`);
+    document.write(`Resultado: ${convertir(baseA, baseB, num).toString()}<br>`);
+
+    //---------------------------Salir--------------------------------------
+    let salir = false;
+    while (true)
+    {
+        resp = prompt("¿Desea convertir otro número? (S/N)");
+
+        if (resp.toUpperCase() != 'S' && resp.toUpperCase() != 'N' || resp == null)
+            alert("ERROR: Carácter inválido, inténtelo de nuevo.");
+        else
+        {
+            //Si el usuario indica que quiere salir, salir se hace true.
+            if (resp.toUpperCase() == 'N') salir = true;
+            break;
+        }
+    }
+    if (salir) break;
 }
